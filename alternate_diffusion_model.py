@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+The Diffusion model defines the parameters, constantas and implements the two methods
+1. The forward method that adds noise to a clean image 
+2. The sample method that generates an image a t from a noised t+1 image based on noise pred from U-Net
+'''
+
+
+
 import torch
 
 class DeepDenoisingProbModel():

@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+This script shows the Tweedle Update
+Any kind of distribution upon addition of noise transforms into a Gaussian
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm

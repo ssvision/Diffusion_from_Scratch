@@ -1,7 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+** DEFUNCT DON"T USE THIS **
+The Diffusion model defines the parameters, constantas and implements the two methods
+1. The forward method that adds noise to a clean image 
+2. The sample method that generates an image a t from a noised t+1 image based on noise pred from U-Net
+3. The last method repeats it for a bunch of timesteps
+'''
+
 import torch
 import numpy as np
-
-
 
 class DDPM():
 

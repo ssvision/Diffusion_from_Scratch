@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Code to visualise noise addition as a gif
+'''
+
 import os
 import torch
 from torch.utils.data import DataLoader

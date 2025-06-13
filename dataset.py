@@ -1,5 +1,10 @@
-import os
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Script related to downloading, managing and converting datasets into tensors
+'''
 
+import os
 import torchvision
 from torch.utils.data import DataLoader
 import torchvision.datasets

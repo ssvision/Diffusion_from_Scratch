@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Original U-Net Model as per Explaining AI youtube video
+'''
+
 import torch
 import torch.nn as nn
 

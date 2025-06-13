@@ -1,10 +1,17 @@
-import torch, numpy as np
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Code to visualise noise addition
+'''
 
+
+import torch, numpy as np
 from dataset import *
 from simple_diffusion_model import DDPM
 from alternate_diffusion_model import DeepDenoisingProbModel
-
 import einops, cv2
+
+
 
 def visualize_noise_addition(n_steps, output_dir, device):
 

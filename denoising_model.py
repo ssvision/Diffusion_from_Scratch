@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Another version of U-Net Model to predict noise addition 
+'''
+
+
 import torch
 from torch import nn
 

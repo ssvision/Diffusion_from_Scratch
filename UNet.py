@@ -1,5 +1,9 @@
-import torch
-import torch.nn as nn
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''
+Explaining and better commented/annotated for understanding code of 
+Original U-Net Model as per Explaining AI youtube video
+'''
 
 
 import torch
