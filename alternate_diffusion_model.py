@@ -63,13 +63,28 @@ class DeepDenoisingProbModel():
 
         ''' Returns image of previous timestep acc to algorithm
             based on the mean and variance & reparameterization trick
+            X_t = img (Tensor) of shape (B,C,H,W)
+            noise_pred = Tensor of shape (B,C,H,W)
+            timestep = Scalar (int)
         '''
+        # batch_size = X_t.shape[0]
+        # alpha_bar_ = self.alpha_bar[timestep-1].reshape(batch_size,1,1,1)
+        # alpha_bar = self.alpha_bar[timestep].reshape(batch_size,1,1,1)
+        # beta = self.beta[timestep].reshape(batch_size,1,1,1)
+        # alpha_bar_sqrt = self.alpha_bar_sqrt[timestep].reshape(batch_size,1,1,1)
+        # one_minus_alpha_bar_sqrt = self.one_minus_alpha_bar_sqrt[timestep].reshape(batch_size,1,1,1)
 
         variance = ((1-self.alpha_bar[timestep-1])/(1-self.alpha_bar[timestep])) * self.beta[timestep]
+        # variance = ((1-alpha_bar_)/(1-alpha_bar)) * beta
         std_dev = variance ** 0.5
+        
+        # print(f"std_dev is : {std_dev}")
+        # print(f"Shape of std_dev is : {std_dev.shape}")
+        
         ''' variance given by the equation '''
-
         mean = (1/self.alpha_bar_sqrt[timestep]) * (X_t - (((self.beta[timestep])/(self.one_minus_alpha_bar_sqrt[timestep]))*noise_pred))
+        # mean = (1/alpha_bar_sqrt) * (X_t - (((beta)/(one_minus_alpha_bar_sqrt))*noise_pred))
+        # print(f"Shape of mean is :{mean.shape}")
 
         if timestep == 0:
             noise = 0
@@ -89,6 +104,11 @@ if __name__ == '__main__':
     model = DeepDenoisingProbModel(10, 0.1, 1)
 
     og_img = torch.randn(32,3,28,28)
-    timestep = torch.full((10,),3)
+    timestep = torch.full((32,),3)
 
-    fwd_eqn = model.fwd_process(og_img, timestep)
+    nxt_img = model.fwd_process(og_img, timestep)
+    noise_pred = torch.randn(32,3,28,28)
+    time_step = 3
+
+    prev_img = model.sample_previous_step(nxt_img, noise_pred, time_step)
+
