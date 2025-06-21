@@ -18,7 +18,7 @@ from UNet import Unet
 # Setup Hyperparameters for training
 
 minibatch_size = 8 # use smaller values to test use powers of 2
-num_epochs = 5
+num_epochs = 5 #use higher for training
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -29,7 +29,7 @@ def train_model(sampler, denoising_model, device:str):
     num_steps = sampler.num_steps
 
     # Setup dataset
-    dataset, dir_path = download_dataset(dataset_name)
+    dataset, dir_path, _ = download_dataset(dataset_name)
     dataloader = get_dataloader(minibatch_size, dir_path)
 
     # Setup Model
@@ -44,7 +44,7 @@ def train_model(sampler, denoising_model, device:str):
         batch_Loss = []
         epoch_Loss = []
 
-        for X, _ in itertools.islice(dataloader, None, 50): # for early stopping of batches
+        for X, _ in itertools.islice(dataloader, None, 20): # for early stopping of batches
             
             batch_size = X.shape[0]
             X = X.to(device)
@@ -63,7 +63,7 @@ def train_model(sampler, denoising_model, device:str):
             loss.backward()
             optim.step()
             batch_Loss.append(loss.item())
-        print(f"Len of batch is : {len(batch_Loss)}")
+        # print(f"Len of batch is : {len(batch_Loss)}")
         epoch_Loss = np.mean(batch_Loss)
         toc = time.time()
         print('Finished epoch:{} | Loss:{:.4f} | Time Elapsed:{:.2f}'.format(epochi,np.mean(epoch_Loss), toc-tic))

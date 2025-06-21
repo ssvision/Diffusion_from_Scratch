@@ -24,7 +24,7 @@ def download_dataset(dataset_name : str):
     print(f"Dataset downloaded sucess with size : {len(dataset)}")
     dataset_tensor_shape = tuple(ToTensor()(dataset[0][0]).shape)
     print(f"Tensor shapes are : {dataset_tensor_shape}")
-    return dataset, dir_path
+    return dataset, dir_path, dataset_tensor_shape
 
 # def get_dataset_tensor_shape(dataset : torchvision.datasets):
 
