@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import itertools
+import os
+import datetime
 
 from dataset import download_dataset, get_dataloader
 from alternate_diffusion_model import DeepDenoisingProbModel
@@ -17,13 +19,14 @@ from UNet import Unet
 
 # Setup Hyperparameters for training
 
-minibatch_size = 8 # use smaller values to test use powers of 2
+minibatch_size = 32 # use smaller values to test use powers of 2
 num_epochs = 5 #use higher for training
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 dataset_name = 'cifar10'
 
+'''Train the model'''
 def train_model(sampler, denoising_model, device:str):
 
     num_steps = sampler.num_steps
@@ -44,7 +47,7 @@ def train_model(sampler, denoising_model, device:str):
         batch_Loss = []
         epoch_Loss = []
 
-        for X, _ in itertools.islice(dataloader, None, 20): # for early stopping of batches
+        for X, _ in itertools.islice(dataloader, None, 15): # for early stopping of batches
             
             batch_size = X.shape[0]
             X = X.to(device)
@@ -68,11 +71,22 @@ def train_model(sampler, denoising_model, device:str):
         toc = time.time()
         print('Finished epoch:{} | Loss:{:.4f} | Time Elapsed:{:.2f}'.format(epochi,np.mean(epoch_Loss), toc-tic))
 
+    '''Save the model'''
+    model_save_path = 'model'
+    model_name = str(datetime.date.today())
+    os.makedirs(model_save_path, exist_ok=True)
+    torch.save(denoising_model.state_dict(), f"{model_save_path}/{dataset_name+model_name}")
+
+
+
+
+
 
 if __name__ == "__main__":
 
-    sampler = DeepDenoisingProbModel(num_steps=10, beta_min=0.001, beta_max=0.1)
+    sampler = DeepDenoisingProbModel(num_steps=10, beta_min=0.001, beta_max=0.1, device='cuda')
     denoising_model = Unet()
+
 
     train_model(sampler, denoising_model, device)
 

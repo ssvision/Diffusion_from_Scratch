@@ -27,13 +27,14 @@ class TemporalEncoding(nn.Module):
         assert self.time_embed_dim % 2 == 0, "Time Embedding Dimension must be even"
 
     @staticmethod
-    def get_temporal_embeddings(time_step, time_embed_dim):
+    def get_temporal_embeddings(time_step, time_embed_dim, device):
         assert time_embed_dim % 2 == 0, "Time Embedding Dimension must be even"
-
-        indices = torch.arange(time_embed_dim // 2, dtype=torch.float32)
+        
+        indices = torch.arange(time_embed_dim // 2, dtype=torch.float32).to(device)
         normalised_indices = indices / (time_embed_dim // 2)
         factors = 10000 ** normalised_indices
-
+        factors.to(device)
+        
         t_emb = time_step[:, None].repeat(1, time_embed_dim // 2) / factors
         temporal_embeddings = torch.cat([torch.sin(t_emb), torch.cos(t_emb)], dim=-1)
 
@@ -363,6 +364,7 @@ class Unet(nn.Module):
             self.num_down_layers = 2
             self.num_mid_layers = 2
             self.num_up_layers = 2
+            self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
            
 
@@ -409,7 +411,7 @@ class Unet(nn.Module):
             # B x C1 x H x W
             
             # t_emb -> B x t_emb_dim
-            t_emb = TemporalEncoding.get_temporal_embeddings(torch.as_tensor(t).long(), self.t_emb_dim)
+            t_emb = TemporalEncoding.get_temporal_embeddings(torch.as_tensor(t).long(), self.t_emb_dim, self.device)
 
             # t_emb = get_time_embedding(torch.as_tensor(t).long(), self.t_emb_dim)
             t_emb = self.t_proj(t_emb)

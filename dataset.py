@@ -48,9 +48,9 @@ def get_mnist_tensor_shape():
 if __name__ == "__main__":
 
     # Write your dataset name here e.g MNIST, CIFAR, etc
-    dataset_name = 'mnist'
-    # dataset_name = 'cifar10'
+    # dataset_name = 'mnist'
+    dataset_name = 'cifar10'
 
-    dataset, dir_path = download_dataset(dataset_name)
+    dataset, dir_path,_ = download_dataset(dataset_name)
     dataset_dataloader = get_dataloader(10, dir_path)
 
