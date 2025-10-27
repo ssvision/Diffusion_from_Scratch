@@ -1,0 +1,6 @@
+# ignore files in the following directories
+data/
+model/
+
+# ignore following files
+
