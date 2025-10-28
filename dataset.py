@@ -7,9 +7,9 @@ Script related to downloading, managing and converting datasets into tensors
 import os
 import torchvision
 from torch.utils.data import DataLoader
-import torchvision.datasets
+import torchvision
 from torchvision.transforms import Compose, Lambda, ToTensor
-
+import matplotlib.pyplot as plt
 
 
 def download_dataset(dataset_name : str):
@@ -52,5 +52,20 @@ if __name__ == "__main__":
     dataset_name = 'cifar10'
 
     dataset, dir_path,_ = download_dataset(dataset_name)
-    dataset_dataloader = get_dataloader(10, dir_path)
+    dataset_dataloader = get_dataloader(batch_size=8, dir_path=dir_path)
+
+    images, labels = next(iter(dataset_dataloader))
+    # Make a grid of images (normalize=True scales images to [0,1] for display)
+    grid = torchvision.utils.make_grid(images, nrow=4, normalize=True, padding=2)
+
+    # Convert to numpy and permute dimensions for matplotlib (C,H,W -> H,W,C)
+    np_grid = grid.permute(1, 2, 0).cpu().numpy()
+
+    # Plot using matplotlib
+    plt.figure(figsize=(6, 6))
+    plt.imshow(np_grid)
+    plt.axis('off')
+    plt.title("Minibatch of 8 Images")
+    plt.show()
+
 
