@@ -20,7 +20,7 @@ from UNet import Unet
 # Setup Hyperparameters for training
 
 minibatch_size = 32 # use smaller values to test use powers of 2
-num_epochs = 5 #use higher for training
+num_epochs = 100 #use higher for training
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -47,14 +47,14 @@ def train_model(sampler, denoising_model, device:str):
         batch_Loss = []
         epoch_Loss = []
 
-        for X, _ in itertools.islice(dataloader, None, 15): # for early stopping of batches
+        for X, _ in itertools.islice(dataloader, None, None): # for early stopping of batches
             
             batch_size = X.shape[0]
             X = X.to(device)
 
             # Setup and execute the fwd noising process
             timestep = torch.randint(0, num_steps, (batch_size, )).to(device)  # t ~ Uniform({1, ..., T})
-            eps = torch.rand_like(X).to(device)
+            eps = torch.randn_like(X).to(device)
             X_t = sampler.fwd_process(X, timestep, eps)
 
             # Run forward pass through the denoising model
@@ -84,7 +84,7 @@ def train_model(sampler, denoising_model, device:str):
 
 if __name__ == "__main__":
 
-    sampler = DeepDenoisingProbModel(num_steps=10, beta_min=0.001, beta_max=0.1, device='cuda')
+    sampler = DeepDenoisingProbModel(num_steps=100, beta_min=0.001, beta_max=0.1, device='cuda')
     denoising_model = Unet()
 
 

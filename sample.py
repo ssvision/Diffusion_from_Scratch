@@ -52,7 +52,7 @@ if __name__=="__main__":
     sampler = DeepDenoisingProbModel(num_steps=100, beta_min=1e-3, beta_max=0.1, device=device)
     pre_trained_model = Unet()
     pre_trained_model.to(device)
-    checkpoint = torch.load('./model/cifar102025-07-29.zip', map_location=torch.device(device))
+    checkpoint = torch.load('./model/cifar102025-11-02', map_location=torch.device(device))
     pre_trained_model.load_state_dict(checkpoint)
     print(f"✅ Weights loaded from pretrained model")
 
