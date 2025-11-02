@@ -72,12 +72,12 @@ class DeepDenoisingProbModel():
         std_dev = variance ** 0.5
         
         ''' variance given by the equation '''
-        mean = (1/self.alpha_bar_sqrt[timestep]) * (X_t - (((self.beta[timestep])/(self.one_minus_alpha_bar_sqrt[timestep]))*noise_pred))
+        mean = (1/torch.sqrt(self.alpha[timestep])) * (X_t - (((self.beta[timestep])/(self.one_minus_alpha_bar_sqrt[timestep]))*noise_pred))
         
         if timestep == 0:
             noise = 0
         else:
-            _eps = torch.rand_like(X_t)
+            _eps = torch.randn_like(X_t)
             noise = std_dev * _eps
 
         X_t_minus_one = mean + noise
